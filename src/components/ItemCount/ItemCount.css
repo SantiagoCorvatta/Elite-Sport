@@ -1,0 +1,9 @@
+.counter{
+    display: flex;
+}
+.addToCartBtn{
+    margin-left: 15px;
+}
+span{
+    margin: 4px;
+}
