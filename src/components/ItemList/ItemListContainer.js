@@ -27,8 +27,7 @@ const ItemListContainer = ({greeting}) => {
 
     return ( 
        <>
-        <h3 className="greeting">{greeting}</h3>
-        {/* <ItemCount initial={1} stock={5} onAdd={onAdd} /> */}
+        <h3 className="greeting">{greeting}</h3>       
         <ItemList products={products}/>
        </>
        
