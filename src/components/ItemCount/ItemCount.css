@@ -1,8 +1,13 @@
 .counter{
     display: flex;
+    flex-direction: column;
+    margin-left: 165px;
+    margin-top: -50px;
+    
 }
 .addToCartBtn{
-    margin-left: 15px;
+    margin-left: -30px;
+    margin-top: 5px;
 }
 span{
     margin: 4px;

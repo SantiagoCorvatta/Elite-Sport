@@ -10,6 +10,8 @@ const ItemCount = ({initial, stock, onAdd}) => {
     const increase = () => {
         setCount(count + 1);
     }
+
+    const handleClick = ()=> onAdd(count);
     useEffect(() => {
         setCount(parseInt(initial));
     },[initial])
@@ -22,7 +24,7 @@ const ItemCount = ({initial, stock, onAdd}) => {
                 <Button variant="success" disabled={count >= stock} onClick={increase}>+</Button>                
             </div>            
             <div className="addToCartBtn">
-                <Button variant="outline-dark" disabled={stock <=0} onClick={()=> onAdd(count)}>Agregar al carrito</Button>    
+                <Button variant="outline-dark" disabled={stock <=0} onClick={handleClick}>Agregar al carrito</Button>    
             </div>
         </div>
      );

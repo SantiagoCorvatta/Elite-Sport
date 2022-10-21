@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,11 +6,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ItemDetailContainer from './components/ItemDetail/ItemDetailContainer';
 import Cart from './components/Cart/Cart';
 import Checkout from './components/Chekout';
+import { CartProvider } from './contexts/CartContext';
+import { useEffect } from 'react';
+import { createAllProducts } from './utils/products';
 
 function App() {
+  
   return (
     <>
     <BrowserRouter>
+      <CartProvider>
       <NavBar />      
       <Routes>
         <Route path='/' element={<ItemListContainer greeting={`Bienvenido a Elite Sport`} />} />
@@ -20,6 +24,7 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/checkout' element={<Checkout/>}/>
       </Routes>
+      </CartProvider>
     </BrowserRouter>  
     </>
   );

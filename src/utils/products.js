@@ -1,43 +1,76 @@
-const products = [
-    {id: 1, name: 'Camiseta River Plate 2022', category: 'futbol', image: 'https://i.postimg.cc/Kj3bs7KB/river1ra.jpg', description: 'Nueva Camiseta de River Plate año 2022', price: 14999},
-    {id: 2, name: 'Pelota Qatar 2022', category: 'futbol', image: 'https://i.postimg.cc/1zMyg3hn/pelota.jpg' , description: 'Pelota oficial del Mundial Qatar 2022', price: 5999},
-    {id: 3, name: 'Seleccion Argentina', category: 'futbol', image: 'https://i.postimg.cc/zGZz6QFB/argqatar.png', description: 'Camiseta Seleccion Argentina Mundial 2022', price: 14999},
-    {id: 4, name: 'Camiseta Boca Juniors', category: 'futbol', image: 'https://i.postimg.cc/HxSFmJGz/boca.jpg', description: 'Camiseta Boca Juniors 2022', price: 14999},
-    {id: 5, name: 'Los Angeles Lakers', category: 'basquet', image: 'https://i.postimg.cc/zfqJXRMY/lakers.jpg', description: 'Musculosa Basquet LAL', price: 8999},
-    {id: 6, name: 'Seleccion Argentina Hockey', category: 'hockey', image: 'https://i.postimg.cc/W1GNv757/leonas.jpg', description: 'Musculosa "Las Leonas"', price: 9999},
-    {id: 7, name: 'Botines Puma Netfit', category: 'futbol', image: 'https://i.postimg.cc/k44qWPqj/puma.jpg', description: 'Botines Puma Netfit Naranja/Negro', price: 8999},
-    {id: 8, name: 'Camiseta Racing Club', category: 'futbol', image: 'https://i.postimg.cc/DZMFgpz7/racing.jpg', description: 'Camiseta Racing Club de Avellaneda 2022', price: 11999},  
-    {id: 9, name: 'Camiseta Termica Flash', category: 'deportiva', image: 'https://i.postimg.cc/G90R0BYN/termica.jpg', description: 'Camiseta termica Flash, deportiva', price: 8999}
-  ]
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
 
  export const getAllProducts = () => {
-    const promise = new Promise ((resolve) => {
-        setTimeout(()=>{
-          return resolve(products);  
-        }, 2000)      
+  const database = getFirestore();
+  const collectionReference = collection(database, 'items');
+  
+  return getDocs(collectionReference)
+    .then(snapshot => {
+      const list = snapshot
+        .docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log(list);
+      return list;
     })
-
-    return promise
-  };
-
+    .catch(error => console.warn(error))
+};
+  
   export const getProduct = (id) => {
-    const promise = new Promise ((resolve) => {
-        const result = products.find((product)=> product.id === parseInt(id))        
-        setTimeout(()=>{
-          return resolve(result);  
-        }, 2000)      
+    const database = getFirestore();
+  const itemReference = doc(database, 'items', id);
+  return getDoc(itemReference)
+    .then(snapshot => {
+      if(snapshot.exists()) {
+        const item = {
+          id: snapshot.id,
+          ...snapshot.data()
+        };
+        return item;
+      }
     })
-
-    return promise
-  };
-
+  
+};
+ 
   export const getProductsByCategory = (categoryId) => {
-    const results = products.filter((product)=> product.category === categoryId);
-    const promise = new Promise ((resolve) => {
-        setTimeout(()=>{
-          return resolve(results);  
-        }, 2000)      
+    const database = getFirestore();
+    const collectionReference = collection(database, 'items');
+    const collectionQuery = query(collectionReference, where('category', '==', categoryId))
+  return getDocs(collectionQuery)
+    .then(snapshot => {
+      const list = snapshot
+        .docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+      return list;
     })
+    .catch(error => console.warn(error))
+};
 
-    return promise
-  };
+const products = [  
+  {name: 'Pelota Qatar 2022', category: 'futbol', image: 'https://i.postimg.cc/1zMyg3hn/pelota.jpg' , description: 'Pelota oficial del Mundial Qatar 2022', price: 5999},
+  {name: 'Seleccion Argentina', category: 'futbol', image: 'https://i.postimg.cc/zGZz6QFB/argqatar.png', description: 'Camiseta Seleccion Argentina Mundial 2022', price: 14999},
+  {name: 'Camiseta Boca Juniors', category: 'futbol', image: 'https://i.postimg.cc/HxSFmJGz/boca.jpg', description: 'Camiseta Boca Juniors 2022', price: 14999},
+  {name: 'Los Angeles Lakers', category: 'basquet', image: 'https://i.postimg.cc/zfqJXRMY/lakers.jpg', description: 'Musculosa Basquet LAL', price: 8999},
+  {name: 'Seleccion Argentina Hockey', category: 'hockey', image: 'https://i.postimg.cc/W1GNv757/leonas.jpg', description: 'Musculosa "Las Leonas"', price: 9999},
+  {name: 'Botines Puma Netfit', category: 'futbol', image: 'https://i.postimg.cc/k44qWPqj/puma.jpg', description: 'Botines Puma Netfit Naranja/Negro', price: 8999},
+  {name: 'Camiseta Racing Club', category: 'futbol', image: 'https://i.postimg.cc/DZMFgpz7/racing.jpg', description: 'Camiseta Racing Club de Avellaneda 2022', price: 11999},  
+  {name: 'Camiseta Termica Flash', category: 'deportiva', image: 'https://i.postimg.cc/G90R0BYN/termica.jpg', description: 'Camiseta termica Flash, deportiva', price: 8999}
+]
+
+export const createAllProducts = async () => {
+  try {
+    const database = getFirestore(); 
+    const collectionReference = collection(database, 'items');
+      for(let i = 0; i < products.length; i++) {
+        const snapshot = await addDoc(collectionReference, products[i]);
+    }
+  } catch (error) {
+    console.warn(error)
+  }
+}
+ 
