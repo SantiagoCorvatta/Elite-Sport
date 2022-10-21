@@ -18,7 +18,7 @@ const OrderModal = ({ showModal, onClose, onBuy, orderId}) => {
           <Form.Control type="text" placeholder="Ingrese nombre" />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Telefono</Form.Label>
+          <Form.Label>Teléfono</Form.Label>
           <Form.Control type="text" placeholder="Ingrese telefono" />
         </Form.Group>
       </Modal.Body>
